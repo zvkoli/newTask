@@ -1,14 +1,14 @@
 import FormTemplate from "@/components/template/FormTemplate";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import InfoBoxTemplate from "@/components/template/InfoBoxTemplate";
+import SliderTemplate from "@/components/template/SliderTemplate";
 
 export default function Home() {
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
+    <main className="w-full h-screen flex flex-row justify-center items-start gap-4 bg-[#FBFBFB] max-lg:h-auto max-lg:flex-col ">
+      <SliderTemplate />
+
       <FormTemplate />
+      <InfoBoxTemplate />
     </main>
   );
 }

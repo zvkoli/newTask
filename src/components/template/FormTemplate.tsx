@@ -1,15 +1,18 @@
 import { Formik, Form } from "formik";
-import InputField from "../module/InputField";
 import { useState, useEffect } from "react";
+import SelectInput from "../module/SelectInput";
+import InputField from "../module/InputField";
 
 interface FormValues {
-  name: string;
+  coverType: string;
+  amount: string;
 }
 
 export default function FormTemplate() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCover, setSelectedCover] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +26,7 @@ export default function FormTemplate() {
         }
 
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         setData(data);
         setLoading(false);
       } catch (error) {
@@ -36,24 +39,30 @@ export default function FormTemplate() {
     fetchData();
   }, []);
 
-  const initialValues: FormValues = {
-    name: "",
+  const onCoverChange = (value: string) => {
+    console.log(value);
+    setSelectedCover(value);
   };
 
-  const validate = (values: FormValues) => {
-    const errors: Partial<FormValues> = {};
-    // if (!values.name) {
-    //   errors.name = "Name is required";
-    // }
-    return errors;
+  const initialValues: FormValues = {
+    coverType: "",
+    amount: "",
   };
+
+  // const validate = (values: FormValues) => {
+  //   const errors: Partial<FormValues> = {};
+  //   if (!values.name) {
+  //     errors.name = "Name is required";
+  //   }
+  //   return errors;
+  // };
 
   const onSubmit = async (values: FormValues) => {
     console.log(values);
   };
 
   return (
-    <div className="w-4/12 border-2 border-red-500">
+    <div className="w-5/12 h-full flex flex-col justify-start items-center gap-2 max-lg:w-full">
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -62,25 +71,61 @@ export default function FormTemplate() {
         <>
           <Formik
             initialValues={initialValues}
-            validate={validate}
+            // validate={validate}
             onSubmit={onSubmit}
           >
             {({ isSubmitting }) => (
-              <Form className="w-full flex flex-col justify-center items-start gap-2 pt-6">
-                <h1>{data?.title}</h1>
-                <InputField
-                  id="name"
-                  name="name"
-                  placeholder="نام خود را وارد کنید"
-                />
+              <Form className="w-full flex flex-col justify-center items-start gap-2 pt-10 ">
+                <h1 className="text-[#6a696f] font-bold text-[1.10rem] pr-5">
+                  {data?.title}
+                </h1>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-blue-500 text-white p-2 rounded"
-                >
-                  ارسال
-                </button>
+                <div className="w-full flex flex-col justify-start items-center gap-2 p-2">
+                  {data?.sections?.map((section: any, index: number) => (
+                    <div
+                      className={`w-full h-auto flex flex-col justify-start items-start gap-2 text-black p-4 rounded-md
+                      ${index !== 0 ? "border border-gary-200" : ""}`}
+                      key={section.title}
+                    >
+                      <h2 className="text-[#6a696f] text-[0.90rem] font-semibold flex flex-row justify-center items-center gap-2">
+                        <span className="bg-red-600 h-4 w-[2px]"></span>
+                        {section?.title}
+                        <p className="text-[0.70rem]">{section?.description}</p>
+                      </h2>
+
+                      <div className="w-full flex flex-col gap-2">
+                        {section?.fields?.map((item: any) => {
+                          if (item.inputType === "Dropdown") {
+                            if (
+                              item.fieldId === "AdtCategories[3].Adt.Side" &&
+                              selectedCover !== "24"
+                            ) {
+                              return null;
+                            }
+
+                            return (
+                              <SelectInput
+                                key={item.fieldId}
+                                item={item}
+                                onChange={
+                                  item.fieldId === "AdtCategories[3].Adt"
+                                    ? onCoverChange
+                                    : undefined
+                                }
+                                selectedCover={selectedCover}
+                              />
+                            );
+                          } else if (item.inputType === "Number") {
+                            return (
+                              <InputField key={item.fieldId} item={item} />
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </Form>
             )}
           </Formik>
