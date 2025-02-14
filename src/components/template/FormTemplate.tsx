@@ -2,6 +2,7 @@ import { Formik, Form } from "formik";
 import { useState, useEffect } from "react";
 import SelectInput from "../module/SelectInput";
 import InputField from "../module/InputField";
+import RadioField from "../module/RadioField";
 
 interface FormValues {
   coverType: string;
@@ -106,18 +107,29 @@ export default function FormTemplate() {
                             return (
                               <SelectInput
                                 key={item.fieldId}
-                                item={item}
+                                label={item.label}
+                                options={item.options}
                                 onChange={
                                   item.fieldId === "AdtCategories[3].Adt"
                                     ? onCoverChange
                                     : undefined
                                 }
-                                selectedCover={selectedCover}
                               />
                             );
                           } else if (item.inputType === "Number") {
                             return (
-                              <InputField key={item.fieldId} item={item} />
+                              <InputField
+                                key={item.fieldId}
+                                label={item.label}
+                                fieldId={item.fieldId}
+                              />
+                            );
+                          } else if (item.inputType === "Radio") {
+                            return (
+                              <RadioField
+                                key={item.fieldId}
+                                options={item.options}
+                              />
                             );
                           }
                           return null;
