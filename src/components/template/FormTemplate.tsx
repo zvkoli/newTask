@@ -62,11 +62,9 @@ export default function FormTemplate() {
     console.log(values);
   };
 
-  const loadingg = true
-
   return (
     <div className="w-5/12 h-full flex flex-col justify-start items-center gap-2 max-lg:w-full">
-      {loadingg ? (
+      {loading ? (
         <p className="w-full h-full flex flex-row justify-center items-center">
           <p className="loader"></p>
         </p>
