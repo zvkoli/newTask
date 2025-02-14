@@ -62,10 +62,14 @@ export default function FormTemplate() {
     console.log(values);
   };
 
+  const loadingg = true
+
   return (
     <div className="w-5/12 h-full flex flex-col justify-start items-center gap-2 max-lg:w-full">
-      {loading ? (
-        <p>Loading...</p>
+      {loadingg ? (
+        <p className="w-full h-full flex flex-row justify-center items-center">
+          <p className="loader"></p>
+        </p>
       ) : error ? (
         <p>{error}</p>
       ) : (
@@ -75,7 +79,7 @@ export default function FormTemplate() {
             // validate={validate}
             onSubmit={onSubmit}
           >
-            {({ isSubmitting }) => (
+            {() => (
               <Form className="w-full flex flex-col justify-center items-start gap-2 pt-10 ">
                 <h1 className="text-[#6a696f] font-bold text-[1.10rem] pr-5">
                   {data?.title}
@@ -146,3 +150,4 @@ export default function FormTemplate() {
     </div>
   );
 }
+
